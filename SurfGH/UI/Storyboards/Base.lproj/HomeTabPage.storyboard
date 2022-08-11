@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad11_0rounded" orientation="landscape" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Home Tab PageVC-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="HomeTabPageVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="HomeTabPageVC" customModule="SurfGH" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="1194" height="834"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="tj1-xA-RDI">
+                                <rect key="frame" x="0.0" y="98.5" width="1194" height="715.5"/>
+                                <color key="backgroundColor" name="creamBlueColor"/>
+                                <color key="sectionIndexBackgroundColor" name="creamBlueColor"/>
+                            </tableView>
+                            <searchBar contentMode="redraw" placeholder="Lets find something interesting" translatesAutoresizingMaskIntoConstraints="NO" id="hn6-VN-cu4">
+                                <rect key="frame" x="0.0" y="24" width="1125" height="51"/>
+                                <color key="backgroundColor" name="creamBlueColor"/>
+                                <color key="barTintColor" name="creamBlueColor"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
+                            </searchBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iQC-fy-IBV" userLabel="SeparatorView">
+                                <rect key="frame" x="0.0" y="95.5" width="1194" height="3"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="3" id="3jL-s8-lIN"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome Label(~)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3fE-y9-ryc">
+                                <rect key="frame" x="0.0" y="75" width="1014" height="20.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wOf-jl-DyG">
+                                <rect key="frame" x="1024" y="70" width="150" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="LIb-CV-b41"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Watched"/>
+                                <connections>
+                                    <action selector="watchedReposButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5zM-YS-TOM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OCd-mL-iCJ">
+                                <rect key="frame" x="1125" y="34" width="69" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Search"/>
+                                <connections>
+                                    <action selector="searchRepoButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZGv-CG-DOE"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" name="creamBlueColor"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="tj1-xA-RDI" secondAttribute="bottom" id="6kW-Id-rRL"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="iQC-fy-IBV" secondAttribute="trailing" id="Jid-ix-aoq"/>
+                            <constraint firstItem="OCd-mL-iCJ" firstAttribute="leading" secondItem="hn6-VN-cu4" secondAttribute="trailing" id="M6M-vL-o6A"/>
+                            <constraint firstItem="wOf-jl-DyG" firstAttribute="centerY" secondItem="3fE-y9-ryc" secondAttribute="centerY" id="MHl-h0-cWb"/>
+                            <constraint firstItem="hn6-VN-cu4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="OKP-bV-S2y"/>
+                            <constraint firstItem="hn6-VN-cu4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="ORD-o7-n8a"/>
+                            <constraint firstItem="tj1-xA-RDI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="SfV-py-Ay2"/>
+                            <constraint firstItem="iQC-fy-IBV" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="TjZ-Gg-mXb"/>
+                            <constraint firstItem="iQC-fy-IBV" firstAttribute="top" secondItem="3fE-y9-ryc" secondAttribute="bottom" id="ZNE-cX-nrF"/>
+                            <constraint firstItem="wOf-jl-DyG" firstAttribute="leading" secondItem="3fE-y9-ryc" secondAttribute="trailing" constant="10" id="bZO-z5-iMG"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="tj1-xA-RDI" secondAttribute="trailing" id="hud-bs-Lc1"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="wOf-jl-DyG" secondAttribute="trailing" constant="20" id="jPH-jH-Skg"/>
+                            <constraint firstItem="tj1-xA-RDI" firstAttribute="top" secondItem="iQC-fy-IBV" secondAttribute="bottom" id="ldO-AP-Bum"/>
+                            <constraint firstItem="3fE-y9-ryc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="oWZ-NQ-8vE"/>
+                            <constraint firstItem="OCd-mL-iCJ" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="r3E-Mx-9l0"/>
+                            <constraint firstItem="3fE-y9-ryc" firstAttribute="top" secondItem="hn6-VN-cu4" secondAttribute="bottom" id="r3S-4B-Bb1"/>
+                            <constraint firstItem="OCd-mL-iCJ" firstAttribute="centerY" secondItem="hn6-VN-cu4" secondAttribute="centerY" id="uhD-fY-38v"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="repoTableView" destination="tj1-xA-RDI" id="m3i-1v-JFK"/>
+                        <outlet property="searchBar" destination="hn6-VN-cu4" id="rYe-ct-ucl"/>
+                        <outlet property="welcomeLabel" destination="3fE-y9-ryc" id="07S-vv-vKi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="152" y="99"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="creamBlueColor">
+            <color red="0.95300000905990601" green="0.98400002717971802" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

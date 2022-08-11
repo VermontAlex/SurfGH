@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad11_0rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Watched Repos PageVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="WatchedReposPageVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" customClass="WatchedReposPageVC" customModule="SurfGH" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="834" height="1194"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="9Hc-jM-FMt">
+                                <rect key="frame" x="0.0" y="66" width="834" height="1108"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="N07-5C-UOd">
+                                <rect key="frame" x="343.5" y="30" width="147" height="32"/>
+                                <segments>
+                                    <segment title="History"/>
+                                    <segment title="Watched"/>
+                                </segments>
+                                <connections>
+                                    <action selector="tableSelectorTapped:" destination="Y6W-OH-hqX" eventType="valueChanged" id="4i4-cB-mmr"/>
+                                </connections>
+                            </segmentedControl>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="9Hc-jM-FMt" firstAttribute="top" secondItem="N07-5C-UOd" secondAttribute="bottom" constant="5" id="HJZ-vJ-rGg"/>
+                            <constraint firstItem="9Hc-jM-FMt" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="g9e-ff-69u"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="9Hc-jM-FMt" secondAttribute="trailing" id="gy4-Bm-mSZ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="9Hc-jM-FMt" secondAttribute="bottom" id="nW6-pE-gCd"/>
+                            <constraint firstItem="N07-5C-UOd" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="vfS-dK-YSL"/>
+                            <constraint firstItem="N07-5C-UOd" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" constant="30" id="zaS-x8-GZk"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="segmentedControl" destination="N07-5C-UOd" id="6ia-ae-19M"/>
+                        <outlet property="watchedReposTableView" destination="9Hc-jM-FMt" id="yFb-Zn-eJd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="124.46043165467627" y="79.899497487437188"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

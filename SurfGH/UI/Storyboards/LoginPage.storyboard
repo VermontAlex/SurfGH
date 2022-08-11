@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad11_0rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Login PageVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="LoginPageVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" customClass="LoginPageVC" customModule="SurfGH" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="834" height="1194"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LoginPageVC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xR9-HI-HAy">
+                                <rect key="frame" x="366.5" y="587" width="101.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ggt-wc-BTY">
+                                <rect key="frame" x="347.5" y="627.5" width="139.5" height="62"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zvC-W6-yxI">
+                                        <rect key="frame" x="0.0" y="0.0" width="139.5" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="gray" title="Login with GitHub"/>
+                                        <connections>
+                                            <action selector="loginWithGitHub:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="4jM-Ti-dDA"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eqO-yU-mdA">
+                                        <rect key="frame" x="0.0" y="31" width="139.5" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="tinted" title="Check my history"/>
+                                        <connections>
+                                            <action selector="offlineModeButtonTapped:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Kp6-0Z-xN5"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" name="creamBlueColor"/>
+                        <constraints>
+                            <constraint firstItem="xR9-HI-HAy" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="Hti-MG-mNk"/>
+                            <constraint firstItem="ggt-wc-BTY" firstAttribute="top" secondItem="xR9-HI-HAy" secondAttribute="bottom" constant="20" id="Iz0-2q-56b"/>
+                            <constraint firstItem="ggt-wc-BTY" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="gbc-I4-TBB"/>
+                            <constraint firstItem="xR9-HI-HAy" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="zOM-iA-Khb"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="loginGitHubButton" destination="zvC-W6-yxI" id="MPH-eo-2WA"/>
+                        <outlet property="loginPageTitle" destination="xR9-HI-HAy" id="dW0-hx-3cV"/>
+                        <outlet property="offlineModeButton" destination="eqO-yU-mdA" id="OOo-ry-a7y"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="114" y="68"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="creamBlueColor">
+            <color red="0.95300000905990601" green="0.98400002717971802" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
