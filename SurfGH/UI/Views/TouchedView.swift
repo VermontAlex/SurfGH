@@ -5,16 +5,15 @@
 //  Created by Oleksandr Oliinyk
 //
 
+import Combine
 import UIKit
 
 class TouchedView: UIView {
     
-    var resignView: (() -> Void)?
+    var resignViewPublisher = PassthroughSubject<Bool, Never>()
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.removeFromSuperview()
-        if let completion = resignView {
-            completion()
-        }
+        resignViewPublisher.send(true)
     }
 }

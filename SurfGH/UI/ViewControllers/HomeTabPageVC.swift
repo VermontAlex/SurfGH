@@ -5,6 +5,7 @@
 //  Created by Oleksandr Oliinyk
 //
 
+import Combine
 import UIKit
 import SafariServices
 
@@ -29,6 +30,7 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
     static let identifier = "HomeTabPageVC"
     static let storyboardName = "HomeTabPage"
     
+    private var sinkSet = Set<AnyCancellable>()
     private var defaultSearch: String = ""
     private var searchedText: String {
         get {
@@ -159,12 +161,10 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         let viewTouchIndicator = TouchedView()
         viewTouchIndicator.backgroundColor = .clear
         viewTouchIndicator.translatesAutoresizingMaskIntoConstraints = false
-        
-        viewTouchIndicator.resignView = { [weak self] in
-            guard let self = self else { return }
+        viewTouchIndicator.resignViewPublisher.sink { action in
             self.searchBar.resignFirstResponder()
             self.performSearchRepositories()
-        }
+        }.store(in: &sinkSet)
         
         self.view.addSubview(viewTouchIndicator)
         let constraints: [NSLayoutConstraint] = [
