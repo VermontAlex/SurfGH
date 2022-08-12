@@ -82,7 +82,7 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         viewModel.searchByWord = searchedText
         viewModel.paginationNumber = 1
         activityIndicator.startAnimating()
-        DispatchQueue.global().async {
+        DispatchQueue.main.async {
             self.sequentlyFillingTable(pagination: viewModel.paginationNumber, searchedWord: viewModel.searchByWord)
         }
     }
@@ -100,14 +100,13 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         let dispatchWorkItem = DispatchWorkItem {
             let result = firstPartResult + secondPartResult
             self.searchedRepo.append(contentsOf: result)
-            self.repoTableView.reloadData()
-            self.activityIndicator.stopAnimating()
             DispatchQueue.main.async {
-                self.saveRepoToCD(repos: result)
+                self.repoTableView.reloadData()
+                self.activityIndicator.stopAnimating()
             }
         }
         
-        dispatchGroup.notify(queue: .main, work: dispatchWorkItem)
+        dispatchGroup.notify(queue: .global(), work: dispatchWorkItem)
     }
     
     private func performGetReposRequest(searchedWord: String, page: Int, token: String) -> [RepoItemCellViewModel] {
@@ -133,6 +132,9 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
             }
         }
         dispatchGroup.wait()
+        DispatchQueue.global().async {
+            self.saveRepoToCD(repos: getResult)
+        }
         return getResult
     }
     
@@ -185,13 +187,16 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         viewModel.paginationNumber = 1
         
         searchedRepo.removeAll()
-        repoTableView.reloadData()
         repoTableView.addSubview(activityIndicator)
         activityIndicator.startAnimating()
         
         viewModel.searchByWord = searchedText
-        coreDataManager.deleteAllCDRepos()
-        sequentlyFillingTable(pagination: viewModel.paginationNumber, searchedWord: searchedText)
+        DispatchQueue.global().async {
+            self.coreDataManager.deleteAllCDRepos()
+        }
+        DispatchQueue.main.async {
+            self.sequentlyFillingTable(pagination: viewModel.paginationNumber, searchedWord: self.searchedText)
+        }
     }
     
     @IBAction func searchRepoButton(_ sender: UIButton) {
@@ -228,7 +233,7 @@ extension HomeTabPageVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         activityIndicator.startAnimating()
-        DispatchQueue.global().async {
+        DispatchQueue.main.async {
             guard self.searchedRepo.count - 5 < indexPath.row, let viewModel = self.viewModel else { return }
             self.sequentlyFillingTable(pagination: viewModel.paginationNumber, searchedWord: viewModel.searchByWord)
         }
