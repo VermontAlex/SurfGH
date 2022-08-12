@@ -20,7 +20,7 @@ struct CoreDataManager {
     }()
     
     private var context: NSManagedObjectContext {
-        let context = CoreDataManager.persistentContainerForLocal.newBackgroundContext()
+        let context = CoreDataManager.persistentContainerForLocal.viewContext
         
         return context
     }
