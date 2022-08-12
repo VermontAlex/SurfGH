@@ -25,8 +25,7 @@ class LoginPageVC: UIViewController, StoryboardedProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         fillInformation()
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
 
     private func fillInformation() {

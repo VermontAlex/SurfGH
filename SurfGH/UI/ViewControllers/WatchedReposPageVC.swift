@@ -23,8 +23,8 @@ class WatchedReposPageVC: UIViewController, StoryboardedProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getWatchedRepos()
-        getHistoryRepo()
+        fillingWatchedRepo()
+        fillingHistoryRepo()
         tableConfiguration()
     }
     
@@ -36,13 +36,13 @@ class WatchedReposPageVC: UIViewController, StoryboardedProtocol {
         repositarySource = historyRepos
     }
     
-    private func getWatchedRepos() {
+    private func fillingWatchedRepo() {
         watchedRepos = mapToRepoItemCellViewModels(from: coreDataManager.fetchWatchedRepos())
         guard watchedRepos.count > 20 else { return }
         watchedRepos.removeSubrange(0...watchedRepos.count - 21)
     }
     
-    private func getHistoryRepo() {
+    private func fillingHistoryRepo() {
         historyRepos = mapToRepoItemCellViewModels(from: coreDataManager.fetchAllCDRepos())
     }
     

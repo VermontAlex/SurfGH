@@ -20,7 +20,7 @@ struct CoreDataManager {
     }()
     
     private var context: NSManagedObjectContext {
-        let context = CoreDataManager.persistentContainerForLocal.viewContext
+        let context = CoreDataManager.persistentContainerForLocal.newBackgroundContext()
         
         return context
     }
@@ -39,11 +39,7 @@ struct CoreDataManager {
                     cdRepo.repoDescription = repo.itemDescription
                     cdRepo.stars = Int64(repo.stargazersCount)
                     cdRepo.isSelected = repo.isSelected
-                    do {
-                        try context.save()
-                    } catch {
-                        ErrorHandlerService.errorString("Error for saving object from GetBeacons in CD Manager").handleErrorWithDB()
-                    }
+                    try context.save()
                 }
             }
         } catch {

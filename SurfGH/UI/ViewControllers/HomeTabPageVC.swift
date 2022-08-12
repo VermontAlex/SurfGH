@@ -50,6 +50,7 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
     private let gitManager = GitHubNetworkManager()
     private let coreDataManager = CoreDataManager()
     private var searchedRepo = [RepoItemCellViewModel]()
+    private let dispatchGroup = DispatchGroup()
     weak var delegate: RepoSelectedDelegate?
     weak var coordinator: CoordinatorProtocol?
     
@@ -93,52 +94,46 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
                   return
               }
         
-        let dispatchGroup = DispatchGroup()
-        dispatchGroup.enter()
-        gitManager.searchForRepos(byName: searchedWord,
-                                  pageNum: pagination,
-                                  token: token) { result in
-            switch result {
-            case .success(let repos):
-                let reposViewModel = repos.items.map { repo in
-                    return RepoItemCellViewModel(repo: repo)
-                }
-                self.searchedRepo.append(contentsOf: reposViewModel)
-                dispatchGroup.leave()
-            case .failure(let error):
-                ErrorHandlerService.unknownedError(error).handleErrorWithDB()
-                dispatchGroup.leave()
-            }
-        }
-        
-        dispatchGroup.wait()
-        dispatchGroup.enter()
-        
-        gitManager.searchForRepos(byName: searchedWord,
-                                  pageNum: pagination + 1,
-                                  token: token) { result in
-            switch result {
-            case .success(let repos):
-                let reposViewModel = repos.items.map { repo in
-                    return RepoItemCellViewModel(repo: repo)
-                }
-                self.searchedRepo.append(contentsOf: reposViewModel)
-                viewModel.paginationNumber += 2
-                dispatchGroup.leave()
-            case .failure(let error):
-                ErrorHandlerService.unknownedError(error).handleErrorWithDB()
-                dispatchGroup.leave()
-            }
-        }
+        let firstPartResult = performGetReposRequest(searchedWord: searchedWord, page: pagination, token: token)
+        let secondPartResult = performGetReposRequest(searchedWord: searchedWord, page: pagination + 1, token: token)
         
         let dispatchWorkItem = DispatchWorkItem {
+            let result = firstPartResult + secondPartResult
+            self.searchedRepo.append(contentsOf: result)
             self.repoTableView.reloadData()
             self.activityIndicator.stopAnimating()
-            
-            self.saveRepoToCD(repos: self.searchedRepo)
+            DispatchQueue.main.async {
+                self.saveRepoToCD(repos: result)
+            }
         }
         
         dispatchGroup.notify(queue: .main, work: dispatchWorkItem)
+    }
+    
+    private func performGetReposRequest(searchedWord: String, page: Int, token: String) -> [RepoItemCellViewModel] {
+        var getResult = [RepoItemCellViewModel]()
+        
+        dispatchGroup.enter()
+        gitManager.searchForRepos(byName: searchedWord,
+                                  pageNum: page,
+                                  token: token) { result in
+            switch result {
+            case .success(let repos):
+                let reposViewModel = repos.items.map { repo in
+                    return RepoItemCellViewModel(repo: repo)
+                }
+                getResult = reposViewModel
+                if page % 2 != 0 {
+                    self.viewModel?.paginationNumber += 2
+                }
+                self.dispatchGroup.leave()
+            case .failure(let error):
+                ErrorHandlerService.unknownedError(error).handleErrorWithDB()
+                self.dispatchGroup.leave()
+            }
+        }
+        dispatchGroup.wait()
+        return getResult
     }
     
     private func saveRepoToCD(repos: [RepoItemCellViewModel]) {

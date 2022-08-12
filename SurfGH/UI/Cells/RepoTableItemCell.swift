@@ -80,7 +80,6 @@ class RepoTableItemCell: UITableViewCell {
     }
     
     private func observeFrame() {
-        DispatchQueue.global().async {
             self.frameObserver = self.observe(\.frame, options: .new) { [weak self] _, _ in
                 DispatchQueue.main.async {
                     guard let strongSelf = self,
@@ -110,7 +109,6 @@ class RepoTableItemCell: UITableViewCell {
                     }
                 }
             }
-        }
     }
 
     @IBAction func showMoreButtonTapped(_ sender: UIButton) {
