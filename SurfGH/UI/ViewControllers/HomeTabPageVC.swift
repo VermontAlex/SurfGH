@@ -160,13 +160,7 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         }.store(in: &sinkSet)
         
         self.view.addSubview(viewTouchIndicator)
-        let constraints: [NSLayoutConstraint] = [
-            viewTouchIndicator.topAnchor.constraint(equalTo: self.welcomeLabel.topAnchor),
-            viewTouchIndicator.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            viewTouchIndicator.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-            viewTouchIndicator.rightAnchor.constraint(equalTo: self.view.rightAnchor)
-        ]
-        NSLayoutConstraint.activate(constraints)
+        viewTouchIndicator.addEdgeConstrainsToSuperview()
     }
     
     private func openUrlInSafari(url: URL) {

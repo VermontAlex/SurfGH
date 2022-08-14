@@ -81,6 +81,7 @@ struct CoreDataManager: CoreMataManagerProtocol {
     
     func fetchAllCDRepos() -> [CDRepos] {
         let fetchRequest = NSFetchRequest<CDRepos>(entityName: "CDRepos")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "stars", ascending: false)]
         do {
             return try context.fetch(fetchRequest)
         } catch {
@@ -93,7 +94,11 @@ struct CoreDataManager: CoreMataManagerProtocol {
         let fetchRequest = NSFetchRequest<CDRepos>(entityName: "CDRepos")
         do {
             let repos = try context.fetch(fetchRequest)
-            repos.forEach({ context.delete($0) })
+            repos.forEach { repo in
+                if repo.isSelected != true {
+                    context.delete(repo)
+                }
+            }
             try context.save()
         } catch {
             ErrorHandlerService.unknownedError().handleErrorWithDB()
