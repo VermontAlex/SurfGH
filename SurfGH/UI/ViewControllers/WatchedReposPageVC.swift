@@ -9,13 +9,13 @@ import UIKit
 
 class WatchedReposPageVC: UIViewController, StoryboardedProtocol {
     
-    @IBOutlet var watchedReposTableView: UITableView!
-    @IBOutlet var segmentedControl: UISegmentedControl!
-    
     static let identifier = "WatchedReposPageVC"
     static let storyboardName = "WatchedReposPage"
     
-    private var coreDataManager = CoreDataManager()
+    @IBOutlet var watchedReposTableView: UITableView!
+    @IBOutlet var segmentedControl: UISegmentedControl!
+    
+    var coreDataManager: CoreMataManagerProtocol?
     
     private var repositarySource = [RepoItemCellViewModel]()
     private var watchedRepos = [RepoItemCellViewModel]()
@@ -23,12 +23,12 @@ class WatchedReposPageVC: UIViewController, StoryboardedProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fillingWatchedRepo()
-        fillingHistoryRepo()
-        tableConfiguration()
+        fillWatchedRepos()
+        fillHistoryRepos()
+        tableInitiallyConfiguration()
     }
     
-    private func tableConfiguration() {
+    private func tableInitiallyConfiguration() {
         watchedReposTableView.delegate = self
         watchedReposTableView.dataSource = self
         watchedReposTableView.separatorColor = .clear
@@ -36,13 +36,15 @@ class WatchedReposPageVC: UIViewController, StoryboardedProtocol {
         repositarySource = historyRepos
     }
     
-    private func fillingWatchedRepo() {
+    private func fillWatchedRepos() {
+        guard let coreDataManager = coreDataManager else { return }
         watchedRepos = mapToRepoItemCellViewModels(from: coreDataManager.fetchWatchedRepos())
         guard watchedRepos.count > 20 else { return }
         watchedRepos.removeSubrange(0...watchedRepos.count - 21)
     }
     
-    private func fillingHistoryRepo() {
+    private func fillHistoryRepos() {
+        guard let coreDataManager = coreDataManager else { return }
         historyRepos = mapToRepoItemCellViewModels(from: coreDataManager.fetchAllCDRepos())
     }
     

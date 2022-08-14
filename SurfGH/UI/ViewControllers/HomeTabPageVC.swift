@@ -198,6 +198,7 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
     
     @IBAction func watchedReposButtonTapped(_ sender: Any) {
         let vc = WatchedReposPageVC.instantiateCustom(storyboard: WatchedReposPageVC.storyboardName)
+        vc.coreDataManager = viewModel?.coreDataManager
         self.present(vc, animated: true, completion: nil)
     }
 }
