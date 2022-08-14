@@ -15,21 +15,21 @@ protocol RepoSelectedDelegate: AnyObject {
 
 class HomeTabPageVC: UIViewController, StoryboardedProtocol {
     
+    static let identifier = "HomeTabPageVC"
+    static let storyboardName = "HomeTabPage"
+    
     @IBOutlet var repoTableView: UITableView!
     @IBOutlet var welcomeLabel: UILabel!
     @IBOutlet var searchBar: UISearchBar!
-    
     private let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
         indicator.hidesWhenStopped = true
         indicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        
         return indicator
     }()
     
-    static let identifier = "HomeTabPageVC"
-    static let storyboardName = "HomeTabPage"
-    
+    private var searchedRepo = [RepoItemCellViewModel]()
+    private let dispatchGroup = DispatchGroup()
     private var sinkSet = Set<AnyCancellable>()
     private var defaultSearch: String = ""
     private var searchedText: String {
@@ -45,35 +45,28 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
             defaultSearch = newValue
         }
     }
-
+    
     var viewModel: HomeTabViewModel?
-    private var searchedRepo = [RepoItemCellViewModel]()
-    private let dispatchGroup = DispatchGroup()
     weak var delegate: RepoSelectedDelegate?
     weak var coordinator: CoordinatorProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.searchBarStyle = .minimal
-        searchBar.delegate = self
-        repoTableView.allowsMultipleSelection = false
-        fillHomeTab()
-        initialFillTheTable()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
         configureTableView()
+        welcomeFillingHomePage()
+        tableViewInitialFilling()
     }
     
     private func configureTableView() {
         repoTableView.delegate = self
         repoTableView.dataSource = self
         repoTableView.separatorColor = .clear
+        repoTableView.allowsMultipleSelection = false
         repoTableView.register(RepoTableItemCell.nib(), forCellReuseIdentifier: RepoTableItemCell.cellReuseIdentifier)
         repoTableView.tableFooterView = activityIndicator
     }
     
-    private func initialFillTheTable() {
+    private func tableViewInitialFilling() {
         guard let viewModel = viewModel else {
             return
         }
@@ -113,8 +106,8 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         
         dispatchGroup.enter()
         viewModel.gitManager?.searchForRepos(byName: searchedWord,
-                                  pageNum: page,
-                                  token: token) { result in
+                                             pageNum: page,
+                                             token: token) { result in
             switch result {
             case .success(let repos):
                 let reposViewModel = repos.items.map { repo in
@@ -142,7 +135,9 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         viewModel.coreDataManager?.saveRepos(repos: repos.map{ $0.repo })
     }
     
-    private func fillHomeTab() {
+    private func welcomeFillingHomePage() {
+        searchBar.searchBarStyle = .minimal
+        searchBar.delegate = self
         guard let viewModel = viewModel else { return fillHomeTabDefault() }
         welcomeLabel.text = "Hello, \(viewModel.account.login)!"
         welcomeLabel.font = UIFont.sf(style: .bold, size: 50)
@@ -177,7 +172,6 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         let safariVC = SFSafariViewController(url: url)
         self.present(safariVC, animated: true, completion: nil)
     }
-    
     
     private func performSearchRepositories() {
         guard let viewModel = viewModel else { return }
@@ -257,7 +251,7 @@ extension HomeTabPageVC: RepoItemCellDelegate {
                 if cellViewModel === vm {
                     continue
                 }
-
+                
                 cellViewModel.expanded = false
             }
         }
