@@ -7,7 +7,15 @@
 
 import CoreData
 
-struct CoreDataManager {
+protocol CoreMataManagerProtocol {
+    func saveRepos(repos: [RepoItemModel])
+    func updateRepoToWatched(repo: RepoItemModel)
+    func fetchWatchedRepos() -> [CDRepos]
+    func fetchAllCDRepos() -> [CDRepos]
+    func deleteAllCDRepos()
+}
+
+struct CoreDataManager: CoreMataManagerProtocol {
     static var persistentContainerForLocal: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "CDRepo")
         

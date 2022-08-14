@@ -7,7 +7,14 @@
 
 import Foundation
 
-struct GitHubNetworkManager {
+protocol GitHubNetworkManagerProtocol {
+    func gitHubSignIn(responseCode: String,
+                      completion: @escaping (Result<GHUserProfileModel, Error>) -> Void)
+    func searchForRepos(byName: String, pageNum: Int, token: String, completion: @escaping (Result<RepoSearchResult, Error>) -> Void)
+    
+}
+
+struct GitHubNetworkManager: GitHubNetworkManagerProtocol {
     
     func gitHubSignIn(responseCode: String,
                       completion: @escaping (Result<GHUserProfileModel, Error>) -> Void) {

@@ -21,7 +21,6 @@ final class AuthCoordinator: NSObject, CoordinatorProtocol, UINavigationControll
     func start() {
         let vc = LoginPageVC.instantiateCustom(storyboard: LoginPageVC.storyboardName)
         vc.coordinator = self
-        vc.gitApiManager = GitHubNetworkManager()
         vc.viewModel = LoginViewModel()
         navigationController.pushViewController(vc, animated: true)
     }

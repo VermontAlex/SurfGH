@@ -9,7 +9,7 @@ import UIKit
 
 enum NextTabCoordinator {
     case authTab
-    case homeTab(viewModel: HomeTabViewModel?)
+    case homeTab(profile: AccountViewModelProtocol)
 }
 
 final class AppCoordinator: NSObject, CoordinatorProtocol, UINavigationControllerDelegate {
@@ -32,9 +32,9 @@ final class AppCoordinator: NSObject, CoordinatorProtocol, UINavigationControlle
         authCoordinator.start()
     }
     
-    func goToHomeTabCoordinator(viewModel: HomeTabViewModel?) {
+    func goToHomeTabCoordinator(with profile: AccountViewModelProtocol) {
         let homeTabCoordinator = HomeTabCoordinator(navigationController: navigationController,
-                                                    viewModel: viewModel)
+                                                    profile: profile)
         childCoordinators.append(homeTabCoordinator)
         homeTabCoordinator.start()
     }
@@ -56,8 +56,8 @@ final class AppCoordinator: NSObject, CoordinatorProtocol, UINavigationControlle
         switch coordinator {
         case .authTab:
             goToAuthCoordinator()
-        case .homeTab(let viewModel):
-            goToHomeTabCoordinator(viewModel: viewModel)
+        case .homeTab(let profile):
+            goToHomeTabCoordinator(with: profile)
         }
     }
 }

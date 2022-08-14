@@ -14,6 +14,8 @@ class HomeTabViewModel {
     var paginationNumber: Int = 1
     var searchByWord: String = ""
     var customTransition: UIViewControllerTransitioningDelegate?
+    var gitManager: GitHubNetworkManagerProtocol?
+    var coreDataManager: CoreMataManagerProtocol?
     
     var tokenToUse: String? {
         get {
@@ -21,10 +23,12 @@ class HomeTabViewModel {
         }
     }
     
-    init(account: AccountViewModelProtocol, service: String, customTransition: UIViewControllerTransitioningDelegate? = nil) {
+    init(account: AccountViewModelProtocol, service: String, customTransition: UIViewControllerTransitioningDelegate? = nil, gitManager: GitHubNetworkManagerProtocol, coreDataManager: CoreMataManagerProtocol) {
         self.account = account
         self.service = service
         self.customTransition = customTransition
+        self.coreDataManager = coreDataManager
+        self.gitManager = gitManager
     }
     
     private func retreiveToken() -> String? {

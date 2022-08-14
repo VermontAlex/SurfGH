@@ -20,7 +20,6 @@ class LoginPageVC: UIViewController, StoryboardedProtocol {
     
     weak var coordinator: AuthCoordinator?
     var viewModel: LoginViewModel?
-    var gitApiManager: GitHubNetworkManager?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,19 +109,18 @@ extension LoginPageVC: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         decisionHandler(.allow)
         if let responseUrl = checkAuthResult(request: navigationAction.request) {
-            guard let code = parseGitHubSignInResponse(url: responseUrl) else { return }
-            gitApiManager?.gitHubSignIn(responseCode: code, completion: { [weak self] result in
+            guard let gitNetworkManager = viewModel?.gitApiManager,
+                  let code = parseGitHubSignInResponse(url: responseUrl) else { return }
+            
+            gitNetworkManager.gitHubSignIn(responseCode: code, completion: { [weak self] result in
                 switch result {
                 case .success(let profile):
                     DispatchQueue.main.async {
-                        self?.coordinator?.stop(andMoveTo: .homeTab(viewModel:
-                                                                        HomeTabViewModel(
-                                                                            account: profile,
-                                                                            service: AuthConstants.serviceGH)))
+                        self?.coordinator?.stop(andMoveTo: .homeTab(profile: profile))
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
-                    self?.showError(alert: ErrorHandlerService.error(error).handleErrorWithUI())
+                        self?.showError(alert: ErrorHandlerService.error(error).handleErrorWithUI())
                     }
                 }
             })
@@ -147,6 +145,7 @@ extension LoginPageVC: WKNavigationDelegate {
                 return result
             }
         }
+        
         DispatchQueue.main.async {
             self.dismiss(animated: true) {
                 self.showError(alert: ErrorHandlerService.unknownedError().handleErrorWithUI())

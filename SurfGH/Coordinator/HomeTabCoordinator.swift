@@ -13,27 +13,35 @@ final class HomeTabCoordinator: CoordinatorProtocol {
     var childCoordinators: [CoordinatorProtocol] = []
     
     var navigationController: UINavigationController
-    var viewModel: HomeTabViewModel?
+    let profile: AccountViewModelProtocol
     
-    init(navigationController : UINavigationController, viewModel: HomeTabViewModel?) {
+    init(navigationController : UINavigationController, profile: AccountViewModelProtocol) {
         self.navigationController = navigationController
         navigationController.view = RootDefaultView()
-        self.viewModel = viewModel
+        self.profile = profile
     }
     
     func start() {
-        let transitionAnimation = CustomTransitionAnimaionHomePage(transitionDuration: 1)
-        let transitionManager = CustomTransitionManager(transitionAnimation: transitionAnimation)
-        viewModel?.customTransition = transitionManager
-        
         let vc = HomeTabPageVC.instantiateCustom(storyboard: HomeTabPageVC.storyboardName)
         vc.modalPresentationStyle = .fullScreen
         vc.coordinator = self
-        vc.viewModel = viewModel
+        vc.viewModel = createHomeTabViewModel()
+        
         navigationController.present(vc, animated: true)
     }
     
     func stop(andMoveTo: NextTabCoordinator? = nil) {
         parentCoordinator?.childDidFinish(self, moveToNext: andMoveTo)
+    }
+    
+    private func createHomeTabViewModel() -> HomeTabViewModel {
+        let transitionAnimation = CustomTransitionAnimaionHomePage(transitionDuration: 1)
+        let transitionManager = CustomTransitionManager(transitionAnimation: transitionAnimation)
+        let homeViewModel = HomeTabViewModel(account: profile,
+                                             service: AuthConstants.serviceGH,
+                                             customTransition: transitionManager,
+                                             gitManager: GitHubNetworkManager(),
+                                             coreDataManager: CoreDataManager())
+        return homeViewModel
     }
 }

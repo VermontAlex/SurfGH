@@ -47,8 +47,6 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
     }
 
     var viewModel: HomeTabViewModel?
-    private let gitManager = GitHubNetworkManager()
-    private let coreDataManager = CoreDataManager()
     private var searchedRepo = [RepoItemCellViewModel]()
     private let dispatchGroup = DispatchGroup()
     weak var delegate: RepoSelectedDelegate?
@@ -110,10 +108,11 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
     }
     
     private func performGetReposRequest(searchedWord: String, page: Int, token: String) -> [RepoItemCellViewModel] {
+        guard let viewModel = viewModel else { return [] }
         var getResult = [RepoItemCellViewModel]()
         
         dispatchGroup.enter()
-        gitManager.searchForRepos(byName: searchedWord,
+        viewModel.gitManager?.searchForRepos(byName: searchedWord,
                                   pageNum: page,
                                   token: token) { result in
             switch result {
@@ -123,7 +122,7 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
                 }
                 getResult = reposViewModel
                 if page % 2 != 0 {
-                    self.viewModel?.paginationNumber += 2
+                    viewModel.paginationNumber += 2
                 }
                 self.dispatchGroup.leave()
             case .failure(let error):
@@ -139,7 +138,8 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
     }
     
     private func saveRepoToCD(repos: [RepoItemCellViewModel]) {
-        coreDataManager.saveRepos(repos: repos.map{ $0.repo })
+        guard let viewModel = viewModel else { return }
+        viewModel.coreDataManager?.saveRepos(repos: repos.map{ $0.repo })
     }
     
     private func fillHomeTab() {
@@ -180,9 +180,7 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
     
     
     private func performSearchRepositories() {
-        guard let viewModel = viewModel else {
-            return
-        }
+        guard let viewModel = viewModel else { return }
         viewModel.searchByWord = searchedText
         viewModel.paginationNumber = 1
         
@@ -192,7 +190,7 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         
         viewModel.searchByWord = searchedText
         DispatchQueue.global().async {
-            self.coreDataManager.deleteAllCDRepos()
+            viewModel.coreDataManager?.deleteAllCDRepos()
         }
         DispatchQueue.main.async {
             self.sequentlyFillingTable(pagination: viewModel.paginationNumber, searchedWord: self.searchedText)
@@ -244,7 +242,7 @@ extension HomeTabPageVC: UITableViewDelegate, UITableViewDataSource {
         guard let selectedRepoUrl = URL(string: selectedRepo.repo.htmlURL ?? "") else { return }
         self.delegate?.repoSelected(vm: selectedRepo,true)
         self.openUrlInSafari(url: selectedRepoUrl)
-        self.coreDataManager.updateRepoToWatched(repo: selectedRepo.repo)
+        self.viewModel?.coreDataManager?.updateRepoToWatched(repo: selectedRepo.repo)
         
         tableView.reloadData()
     }
