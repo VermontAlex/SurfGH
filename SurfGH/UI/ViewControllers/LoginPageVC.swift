@@ -23,11 +23,11 @@ class LoginPageVC: UIViewController, StoryboardedProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fillInformation()
+        initialPageFilling()
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
 
-    private func fillInformation() {
+    private func initialPageFilling() {
         guard let viewModel = viewModel else { return }
         let isConnected = viewModel.isAbleConnection
         offlineModeButton.isHidden = isConnected
@@ -84,7 +84,7 @@ class LoginPageVC: UIViewController, StoryboardedProtocol {
     }
     
     @objc func appMovedToBackground() {
-        fillInformation()
+        initialPageFilling()
     }
     
     @objc func cancelAction() {
