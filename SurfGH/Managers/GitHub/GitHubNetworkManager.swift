@@ -5,13 +5,13 @@
 //  Created by Oleksandr Oliinyk
 //
 
+import Combine
 import Foundation
 
 protocol GitHubNetworkManagerProtocol {
     func gitHubSignIn(responseCode: String,
                       completion: @escaping (Result<GHUserProfileModel, Error>) -> Void)
-    func searchForRepos(byName: String, pageNum: Int, token: String, completion: @escaping (Result<RepoSearchResult, Error>) -> Void)
-    
+    func searchForRepos(byName: String, pageNum: Int, token: String) -> Future<RepoSearchResult, Error>
 }
 
 struct GitHubNetworkManager: GitHubNetworkManagerProtocol {
@@ -49,18 +49,22 @@ struct GitHubNetworkManager: GitHubNetworkManagerProtocol {
         operationQueue.waitUntilAllOperationsAreFinished()
     }
     
-    func searchForRepos(byName: String, pageNum: Int, token: String, completion: @escaping (Result<RepoSearchResult, Error>) -> Void) {
-        guard let request = GitHubRequestBuilder.fetchRepoItems(searchBy: byName, page: pageNum, token: token).request else { return }
-        let operationQueue = OperationQueue()
-        let fetchReposOperation = FetchRepos(urlRequest: request) { result in
-            switch result {
-            case .success(let result):
-                completion(.success(result))
-            case .failure(let error):
-                completion(.failure(error))
-            }
+    func searchForRepos(byName: String, pageNum: Int, token: String) -> Future<RepoSearchResult, Error> {
+        return Future { promise in
+            guard let request = GitHubRequestBuilder.fetchRepoItems(searchBy: byName, page: pageNum, token: token).request else { return }
+            URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+                if let data = data {
+                    do {
+                        let repos = try JSONDecoder().decode(RepoSearchResult.self, from: data)
+                            promise(.success(repos))
+                    } catch {
+                        promise(.failure(error))
+                    }
+                } else if let error = error {
+                    promise(.failure(error))
+                }
+            }).resume()
         }
-        operationQueue.addOperation(fetchReposOperation)
     }
 }
 
@@ -117,46 +121,6 @@ private final class FetchProfile: BasicSequenceOperation {
                                                                                 personalToken: token.accessToken,
                                                                                 server: AuthConstants.serviceGH))
                         completion(.success(profile))
-                        self?.state = .finished
-                } catch {
-                        completion(.failure(error))
-                        self?.state = .finished
-                }
-            } else if let error = error {
-                    completion(.failure(error))
-                    self?.state = .finished
-            }
-            self?.state = .finished
-        })
-    }
-    
-    override func start() {
-        if isCancelled {
-            state = .finished
-            return
-        }
-        
-        state = .executing
-        
-        self.task?.resume()
-    }
-    
-    override func cancel() {
-        super.cancel()
-        self.task?.cancel()
-    }
-}
-
-private final class FetchRepos: BasicSequenceOperation {
-    
-    init(urlRequest: URLRequest,
-         completion: @escaping (Result<RepoSearchResult, Error>) -> Void) {
-        super.init()
-        task = URLSession.shared.dataTask(with: urlRequest, completionHandler: { [weak self] (data, response, error) in
-            if let data = data {
-                do {
-                    let repos = try JSONDecoder().decode(RepoSearchResult.self, from: data)
-                        completion(.success(repos))
                         self?.state = .finished
                 } catch {
                         completion(.failure(error))

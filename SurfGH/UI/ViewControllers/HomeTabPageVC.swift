@@ -105,24 +105,25 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         var getResult = [RepoItemCellViewModel]()
         
         dispatchGroup.enter()
-        gitManager.searchForRepos(byName: searchedWord,
-                                  pageNum: page,
-                                  token: token) { result in
-            switch result {
-            case .success(let repos):
-                let reposViewModel = repos.items.map { repo in
-                    return RepoItemCellViewModel(repo: repo)
-                }
-                getResult = reposViewModel
-                if page % 2 != 0 {
-                    viewModel.paginationNumber += 2
-                }
-                self.dispatchGroup.leave()
+        gitManager.searchForRepos(byName: searchedWord, pageNum: page, token: token).sink { receiveCompletion in
+            switch receiveCompletion {
+            case .finished:
+                break
             case .failure(let error):
                 ErrorHandlerService.unknownedError(error).handleErrorWithDB()
                 self.dispatchGroup.leave()
             }
-        }
+        } receiveValue: { repos in
+            let reposViewModel = repos.items.map { repo in
+                return RepoItemCellViewModel(repo: repo)
+            }
+            getResult = reposViewModel
+            if page % 2 != 0 {
+                viewModel.paginationNumber += 2
+            }
+            self.dispatchGroup.leave()
+        }.store(in: &sinkSet)
+
         dispatchGroup.wait()
         DispatchQueue.global().async {
             self.saveRepoToCD(repos: getResult)
