@@ -50,8 +50,8 @@ class WatchedReposPageVC: UIViewController, StoryboardedProtocol {
     
     private func mapToRepoItemCellViewModels(from cdRepos: [CDRepos]) -> [RepoItemCellViewModel] {
         let result: [RepoItemCellViewModel]  = cdRepos.map({ cdRepo in
-            let repoOwner = RepoOwner(login: cdRepo.ownerName ?? "", id: nil)
-            let repo = RepoItemModel(id: nil, name: cdRepo.name ?? "", fullName: cdRepo.fullName ?? "", itemPrivate: nil, owner: repoOwner, htmlURL: nil, itemDescription: cdRepo.repoDescription, stargazersCount: Int(cdRepo.stars), forksCount: nil, isSelected: cdRepo.isSelected)
+            let repoOwner = RepoOwner(login: cdRepo.ownerName ?? "")
+            let repo = RepoItemModel(name: cdRepo.name ?? "", fullName: cdRepo.fullName ?? "", owner: repoOwner, htmlURL: nil, itemDescription: cdRepo.repoDescription, stargazersCount: Int(cdRepo.stars), isSelected: cdRepo.isSelected)
             
             return RepoItemCellViewModel(repo: repo)
         })
