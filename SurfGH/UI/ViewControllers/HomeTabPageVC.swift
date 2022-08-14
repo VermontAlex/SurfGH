@@ -101,13 +101,13 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
     }
     
     private func performGetReposRequest(searchedWord: String, page: Int, token: String) -> [RepoItemCellViewModel] {
-        guard let viewModel = viewModel else { return [] }
+        guard let viewModel = viewModel, let gitManager = viewModel.gitManager else { return [] }
         var getResult = [RepoItemCellViewModel]()
         
         dispatchGroup.enter()
-        viewModel.gitManager?.searchForRepos(byName: searchedWord,
-                                             pageNum: page,
-                                             token: token) { result in
+        gitManager.searchForRepos(byName: searchedWord,
+                                  pageNum: page,
+                                  token: token) { result in
             switch result {
             case .success(let repos):
                 let reposViewModel = repos.items.map { repo in
