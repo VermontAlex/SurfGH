@@ -37,14 +37,14 @@ class WatchedReposPageVC: UIViewController, StoryboardedProtocol {
     }
     
     private func fillWatchedRepos() {
-        guard let coreDataManager = coreDataManager else { return }
+        let coreDataManager = coreDataManager ?? CoreDataManager()
         watchedRepos = mapToRepoItemCellViewModels(from: coreDataManager.fetchWatchedRepos())
         guard watchedRepos.count > 20 else { return }
         watchedRepos.removeSubrange(0...watchedRepos.count - 21)
     }
     
     private func fillHistoryRepos() {
-        guard let coreDataManager = coreDataManager else { return }
+        let coreDataManager = coreDataManager ?? CoreDataManager()
         historyRepos = mapToRepoItemCellViewModels(from: coreDataManager.fetchAllCDRepos())
     }
     
