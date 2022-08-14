@@ -37,21 +37,12 @@ class LoginPageVC: UIViewController, StoryboardedProtocol {
     
     private func startAuthWebViewProcedure() {
         guard let authRequest = GitHubRequestBuilder.getAuthRequest(cliendId: AuthConstants.cliendIdGH).request else { return }
-        
         let githubVC = UIViewController()
-        
         webView = WKWebView()
         webView.navigationDelegate = self
         githubVC.view.addSubview(webView)
-        
+        webView.addEdgeConstrainsToSuperview()
         webView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: githubVC.view.topAnchor),
-            webView.leadingAnchor.constraint(equalTo: githubVC.view.leadingAnchor),
-            webView.bottomAnchor.constraint(equalTo: githubVC.view.bottomAnchor),
-            webView.trailingAnchor.constraint(equalTo: githubVC.view.trailingAnchor)
-        ])
-
         webView.load(authRequest)
         
         showAuthWebView(gitHubWebView: githubVC)
