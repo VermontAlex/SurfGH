@@ -63,7 +63,7 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         if !InternetReachability.isConnectedToNetwork() {
             let alert = UIAlertController(title: "Application will switch to offline mode.", message: "Please check you internet connection and reopen the application.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Understand", style: .default, handler: { action in
-                self.isOfflineMode = true
+                self.isOfflineMode.toggle()
                 self.showSearchHistory()
             }))
             self.present(alert, animated: true, completion: nil)
@@ -76,10 +76,6 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         let vc = WatchedReposPageVC.instantiateCustom(storyboard: WatchedReposPageVC.storyboardName)
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true, completion: nil)
-    }
-    
-    private func turnOffOfflineMode() {
-        
     }
     
     private func configureTableView() {
