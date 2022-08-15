@@ -28,6 +28,7 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
         return indicator
     }()
     
+    private var isOfflineMode = false
     private var searchedRepo = [RepoItemCellViewModel]()
     private let dispatchGroup = DispatchGroup()
     private var sinkSet = Set<AnyCancellable>()
@@ -48,13 +49,37 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
     
     var viewModel: HomeTabViewModel?
     weak var delegate: RepoSelectedDelegate?
-    weak var coordinator: CoordinatorProtocol?
+    weak var coordinator: HomeTabCoordinator?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTableView()
         welcomeFillingHomePage()
         tableViewInitialFilling()
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
+    @objc func appMovedToBackground() {
+        if !InternetReachability.isConnectedToNetwork() {
+            let alert = UIAlertController(title: "Application will switch to offline mode.", message: "Please check you internet connection and reopen the application.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Understand", style: .default, handler: { action in
+                self.isOfflineMode = true
+                self.showSearchHistory()
+            }))
+            self.present(alert, animated: true, completion: nil)
+        } else if isOfflineMode {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    private func showSearchHistory() {
+        let vc = WatchedReposPageVC.instantiateCustom(storyboard: WatchedReposPageVC.storyboardName)
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    private func turnOffOfflineMode() {
+        
     }
     
     private func configureTableView() {

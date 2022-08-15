@@ -35,6 +35,7 @@ final class AppCoordinator: NSObject, CoordinatorProtocol, UINavigationControlle
     func goToHomeTabCoordinator(with profile: AccountViewModelProtocol) {
         let homeTabCoordinator = HomeTabCoordinator(navigationController: navigationController,
                                                     profile: profile)
+        homeTabCoordinator.parentCoordinator = self
         childCoordinators.append(homeTabCoordinator)
         homeTabCoordinator.start()
     }

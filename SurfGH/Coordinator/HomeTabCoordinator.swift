@@ -26,7 +26,6 @@ final class HomeTabCoordinator: CoordinatorProtocol {
         vc.modalPresentationStyle = .fullScreen
         vc.coordinator = self
         vc.viewModel = createHomeTabViewModel()
-        
         navigationController.present(vc, animated: true)
     }
     
