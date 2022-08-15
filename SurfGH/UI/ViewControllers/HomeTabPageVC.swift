@@ -61,6 +61,9 @@ class HomeTabPageVC: UIViewController, StoryboardedProtocol {
     
     @objc func appMovedToBackground() {
         if !InternetReachability.isConnectedToNetwork() {
+            if self.presentedViewController != nil {
+                self.dismiss(animated: true, completion: nil)
+            }
             let alert = UIAlertController(title: "Application will switch to offline mode.", message: "Please check you internet connection and reopen the application.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Understand", style: .default, handler: { action in
                 self.isOfflineMode.toggle()
